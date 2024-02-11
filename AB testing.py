@@ -1,3 +1,5 @@
+#Dataset source: kaggle.
+#The dataset we are using here contains two data files about two marketing campaigns (Control Campaign and Test Campaign)
 import pandas as pd
 import datetime
 from datetime import date, timedelta
@@ -22,9 +24,11 @@ test_data.columns = ["Campaign Name", "Date", "Amount Spent",
                         "Searches Received", "Content Viewed", "Added to Cart",
                         "Purchases"]
 
+#checking for null values
 print(control_data.isnull().sum())
 print(test_data.isnull().sum())
 
+#Filling missing values in the control campaign dataset with column means.
 control_data["Number of Impressions"].fillna(value=control_data["Number of Impressions"].mean(), 
                                              inplace=True)
 control_data["Reach"].fillna(value=control_data["Reach"].mean(), 
@@ -40,12 +44,17 @@ control_data["Added to Cart"].fillna(value=control_data["Added to Cart"].mean(),
 control_data["Purchases"].fillna(value=control_data["Purchases"].mean(), 
                                  inplace=True)
 
+#Creating new datasets by merging both datasets.
 ab_data = control_data.merge(test_data, 
                              how="outer").sort_values(["Date"])
 ab_data = ab_data.reset_index(drop=True)
 print(ab_data.head())
+
+#Checking if the dataset has an equal number of samples for both campaigns.
 print(ab_data["Campaign Name"].value_counts())
 
+#A/B testing to find the best marketing strategy
+#Analyzing the correlation between impressions and campaign spending.
 figure = px.scatter(data_frame = ab_data, 
                     x="Number of Impressions",
                     y="Amount Spent", 
