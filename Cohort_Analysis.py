@@ -13,15 +13,14 @@ from sklearn.cluster import KMeans
 
 df = pd.read_excel('Online Retail.xlsx')
 df.head()
-
 df.info()
-
+#checking for missing values
 df.isnull().sum()
-
+#Removing rows with missing values
 df= df.dropna(subset=['CustomerID'])
 
+#check and clean duplicate data
 df.duplicated().sum()
-
 df = df.drop_duplicates()
 df.describe()
 
